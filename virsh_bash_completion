@@ -104,7 +104,6 @@ _virsh()
     ret=$(_contain_cmd "$array" "$cmds_help")
 
     if [ "$ret" != "notfound" ]; then
-        echo $ret
         a=$(virsh help "$ret" |grep '^    --'|cut -d\  -f5)
         b=$(virsh help "$ret" |grep '^    \[--'|cut -d\  -f5|cut -d[  -f2|cut -d]  -f1)
         options=$( echo $a $b )

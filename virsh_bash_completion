@@ -68,12 +68,22 @@ _virsh_list_ifaces()
     virsh -q iface-list $flags | cut -d\  -f2 | awk '{print $1}'
 }
 
+_virsh_list_nwfilters()
+{
+
+    virsh -q nwfilter-list | cut -d\  -f4 | awk '{print $1}'
+}
+
 _virsh() 
 {
     local cur prev cmds doms options nets pools cmds_help
-    local flag_all=1 array ret a b ifaces
+    local flag_all=1 array ret a b ifaces nwfilters
 
-    _init_completion -s || return
+#   not must use bash-completion now :)
+#    _init_completion -s || return
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
 
     cmds=$( echo "$(virsh -h| grep '^    ' | cut -d\  -f5)" \
             "$(virsh -h| grep '\--' | cut -d\  -f7 | cut -d= -f1)")
@@ -97,6 +107,11 @@ _virsh()
         --interface)
             ifaces=$(_virsh_list_ifaces "$flag_all")
             COMPREPLY=( $(compgen -W "$ifaces" -- "$cur") )
+            return 0
+            ;;
+        --nwfilter)
+            nwfilters=$(_virsh_list_nwfilters)
+            COMPREPLY=( $(compgen -W "$nwfilters" -- "$cur") )
             return 0
             ;;
     esac

@@ -75,7 +75,8 @@ _virsh()
 
     _init_completion -s || return
 
-    cmds=$( echo "$(virsh -h| grep '^    ' | cut -d\  -f5)" "$(virsh -h| grep '\--' | cut -d\  -f7 | cut -d= -f1)")
+    cmds=$( echo "$(virsh -h| grep '^    ' | cut -d\  -f5)" \
+            "$(virsh -h| grep '\--' | cut -d\  -f7 | cut -d= -f1)")
     cmds_help=$(virsh help| grep '^    ' | cut -d\  -f5)
     case "$prev" in
         --domain)
@@ -103,7 +104,7 @@ _virsh()
     array=$(IFS=$'\n'; echo "${COMP_WORDS[*]}")
     ret=$(_contain_cmd "$array" "$cmds_help")
 
-    if [ "$ret" != "notfound" ]; then
+    if [[ "$ret" != "notfound" && "$ret" != "$cur" ]]; then
         a=$(virsh help "$ret" |grep '^    --'|cut -d\  -f5)
         b=$(virsh help "$ret" |grep '^    \[--'|cut -d\  -f5|cut -d[  -f2|cut -d]  -f1)
         options=$( echo $a $b )

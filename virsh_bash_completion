@@ -77,7 +77,7 @@ _virsh_list_nwfilters()
 _virsh() 
 {
     local cur prev cmds doms options nets pools cmds_help
-    local flag_all=1 array ret a b ifaces nwfilters
+    local flag_all=1 array ret a b ifaces nwfilters files
 
 #   not must use bash-completion now :)
 #    _init_completion -s || return
@@ -112,6 +112,11 @@ _virsh()
         --nwfilter)
             nwfilters=$(_virsh_list_nwfilters)
             COMPREPLY=( $(compgen -W "$nwfilters" -- "$cur") )
+            return 0
+            ;;
+        --file|--xml)
+            files=$(ls)
+            COMPREPLY=( $(compgen -W "$files" -- "$cur") )
             return 0
             ;;
     esac

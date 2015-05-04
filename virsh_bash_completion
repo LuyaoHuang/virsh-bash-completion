@@ -138,7 +138,5 @@ _virsh()
             return 0
             ;;
     esac
-
-    return 1
-}
-complete -F _virsh virsh
+} &&
+complete -o default -F _virsh virsh
